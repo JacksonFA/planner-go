@@ -1,0 +1,21 @@
+FROM golang:1.22.4-alpine as dev
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download && go mod verify
+
+COPY . .
+
+RUN go install github.com/discord-gophers/goapi-gen@latest \
+    && go install github.com/jackc/tern/v2@latest \
+    && go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+COPY .Docker/entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 8080
+
+ENTRYPOINT [ "/entrypoint.sh" ]

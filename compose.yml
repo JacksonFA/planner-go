@@ -27,7 +27,9 @@ services:
       - pgadmin:/var/lib/pgadmin
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
     container_name: planner
     ports:
       - 8080:8080
